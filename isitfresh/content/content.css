@@ -1,0 +1,211 @@
+/**
+ * isitfresh - Tooltip Styles
+ * Rotten Tomatoes ratings overlay for Netflix and Prime Video
+ */
+
+#isitfresh-tooltip {
+  position: absolute;
+  z-index: 999999;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 16px;
+  min-width: 260px;
+  max-width: 320px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -100%) translateY(-8px);
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: auto;
+}
+
+#isitfresh-tooltip.rt-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+#isitfresh-tooltip.rt-tooltip-below {
+  transform: translate(-50%, 0) translateY(8px);
+}
+
+/* Arrow */
+#isitfresh-tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #1a1a1a;
+}
+
+#isitfresh-tooltip.rt-tooltip-below::after {
+  bottom: auto;
+  top: -8px;
+  border-top: none;
+  border-bottom: 8px solid #1a1a1a;
+}
+
+/* Header */
+.rt-tooltip-header {
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+.rt-tooltip-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  display: block;
+  line-height: 1.3;
+}
+
+.rt-tooltip-year {
+  font-size: 12px;
+  color: #999;
+  margin-left: 4px;
+}
+
+/* Scores Container */
+.rt-tooltip-scores {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.rt-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Score Icons */
+.rt-score-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.rt-score-icon.rt-tomato {
+  background: #1a1a1a;
+}
+
+.rt-score-icon.rt-tomato::before {
+  content: "🍅";
+}
+
+.rt-score-icon.rt-tomato.rotten::before {
+  content: "🟢";
+  filter: grayscale(1) brightness(0.6);
+}
+
+.rt-score-icon.rt-tomato.fresh {
+  background: linear-gradient(135deg, #fa320a 0%, #d92800 100%);
+}
+
+.rt-score-icon.rt-tomato.fresh::before {
+  content: "🍅";
+}
+
+.rt-score-icon.rt-popcorn::before {
+  content: "🍿";
+}
+
+.rt-score-icon.rt-popcorn.liked {
+  background: linear-gradient(135deg, #f5c518 0%, #e6b800 100%);
+}
+
+.rt-score-icon.rt-popcorn.disliked {
+  background: #333;
+}
+
+/* Score Values */
+.rt-score-value {
+  display: flex;
+  flex-direction: column;
+}
+
+.rt-score-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.rt-score-label {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* Consensus */
+.rt-tooltip-consensus {
+  font-size: 11px;
+  color: #aaa;
+  line-height: 1.4;
+  padding-top: 8px;
+  border-top: 1px solid #333;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Not Found */
+.rt-tooltip-notfound {
+  display: none;
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/* Loading */
+.rt-tooltip-loading {
+  display: none;
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+  padding: 12px 0;
+}
+
+.rt-tooltip-loading::after {
+  content: "";
+  animation: rt-loading-dots 1.5s infinite;
+}
+
+@keyframes rt-loading-dots {
+  0% { content: ""; }
+  25% { content: "."; }
+  50% { content: ".."; }
+  75% { content: "..."; }
+}
+
+/* Freshness Colors */
+.rt-tomatometer .rt-score-number {
+  color: #fa320a;
+}
+
+.rt-audience .rt-score-number {
+  color: #f5c518;
+}
+
+/* Rotten override */
+.rt-score-icon.rt-tomato.rotten + .rt-score-value .rt-score-number {
+  color: #6c6c6c;
+}
+
+.rt-score-icon.rt-popcorn.disliked + .rt-score-value .rt-score-number {
+  color: #6c6c6c;
+}

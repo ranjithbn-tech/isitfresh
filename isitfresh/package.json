@@ -1,0 +1,25 @@
+{
+  "name": "isitfresh",
+  "version": "1.0.0",
+  "description": "Chrome extension that shows Rotten Tomatoes ratings on Netflix and Prime Video",
+  "scripts": {
+    "convert": "node scripts/convert-kaggle-csv.js",
+    "fetch-trending": "node scripts/fetch-trending-titles.js",
+    "update": "node scripts/update-from-omdb.js",
+    "full-update": "npm run fetch-trending && npm run update"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ranjithbn-tech/isitfresh.git"
+  },
+  "keywords": [
+    "rotten-tomatoes",
+    "ratings",
+    "movies",
+    "chrome-extension",
+    "netflix",
+    "prime-video"
+  ],
+  "author": "ranjithbn-tech",
+  "license": "MIT"
+}

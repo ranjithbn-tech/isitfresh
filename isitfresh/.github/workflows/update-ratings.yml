@@ -1,0 +1,112 @@
+name: Update Ratings Database
+
+on:
+  # Run every Sunday at midnight UTC
+  schedule:
+    - cron: '0 0 * * 0'
+  
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      force_full_refresh:
+        description: 'Force full refresh from Kaggle'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  update-ratings:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Create data directory
+        run: mkdir -p data
+      
+      # Step 1: Fetch trending titles from TMDb
+      - name: Fetch trending titles from TMDb
+        if: ${{ !inputs.force_full_refresh }}
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: |
+          if [ -n "$TMDB_API_KEY" ]; then
+            echo "Fetching trending titles from TMDb..."
+            node scripts/fetch-trending-titles.js
+          else
+            echo "TMDB_API_KEY not set, skipping trending fetch"
+          fi
+      
+      # Step 2: Update ratings from OMDb
+      - name: Update ratings from OMDb
+        if: ${{ !inputs.force_full_refresh }}
+        env:
+          OMDB_API_KEY: ${{ secrets.OMDB_API_KEY }}
+        run: |
+          if [ -n "$OMDB_API_KEY" ]; then
+            echo "Updating ratings from OMDb..."
+            node scripts/update-from-omdb.js
+          else
+            echo "OMDB_API_KEY not set, skipping OMDb update"
+          fi
+      
+      # Step 3: Validate JSON
+      - name: Validate ratings.json
+        run: |
+          if [ -f "data/ratings.json" ]; then
+            echo "Validating ratings.json..."
+            node -e "
+              const fs = require('fs');
+              const data = JSON.parse(fs.readFileSync('data/ratings.json', 'utf-8'));
+              console.log('Version:', data.version);
+              console.log('Count:', data.count);
+              console.log('Valid JSON: true');
+            "
+          else
+            echo "No ratings.json found"
+            exit 0
+          fi
+      
+      # Step 4: Commit and push changes
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          
+          # Check if there are changes
+          if git diff --quiet data/; then
+            echo "No changes to commit"
+          else
+            git add data/
+            git commit -m "Update ratings database - $(date +'%Y-%m-%d')"
+            git push
+          fi
+      
+      # Step 5: Log summary
+      - name: Summary
+        run: |
+          echo "## Ratings Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "data/ratings.json" ]; then
+            node -e "
+              const fs = require('fs');
+              const data = JSON.parse(fs.readFileSync('data/ratings.json', 'utf-8'));
+              console.log('- **Version:** ' + data.version);
+              console.log('- **Total Titles:** ' + data.count);
+              if (data.lastUpdate) {
+                console.log('- **Added:** ' + data.lastUpdate.added);
+                console.log('- **Updated:** ' + data.lastUpdate.updated);
+              }
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No ratings database found" >> $GITHUB_STEP_SUMMARY
+          fi
