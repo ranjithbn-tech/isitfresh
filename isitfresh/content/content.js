@@ -17,7 +17,9 @@
   // Tooltip element
   let tooltip = null;
   let currentHoveredElement = null;
+  let currentCardRect = null;
   let hideTimeout = null;
+  let lastMousePosition = { x: 0, y: 0 };
 
   // Normalize title for lookup (must match the database format)
   function normalizeTitle(title) {
