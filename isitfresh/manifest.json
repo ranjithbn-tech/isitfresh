@@ -10,7 +10,8 @@
   },
   "permissions": [
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "alarms"
   ],
   "host_permissions": [
     "https://*.netflix.com/*",
