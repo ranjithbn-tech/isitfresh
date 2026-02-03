@@ -15,8 +15,7 @@ const CONFIG = {
   VERSION_KEY: 'dataVersion'
 };
 
-// Declare chrome variable
-const chrome = window.chrome;
+// Note: 'chrome' is a global object in Chrome extensions - no import needed
 
 // Fetch and cache the ratings database
 async function fetchAndCacheRatings() {
