@@ -6,7 +6,7 @@
 // Configuration
 const CONFIG = {
   // GitHub Pages URL for ratings data
-  RATINGS_URL: 'https://ranjithbn-tech.github.io/isitfresh/data/ratings.json',
+  RATINGS_URL: 'https://ranjithbn-tech.github.io/isitfresh/isitfresh/data/ratings.json',
   // How often to check for updates (in milliseconds)
   UPDATE_INTERVAL: 24 * 60 * 60 * 1000, // 24 hours
   // Storage keys
