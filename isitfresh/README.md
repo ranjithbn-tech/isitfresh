@@ -21,9 +21,9 @@ Is it fresh? See Rotten Tomatoes ratings instantly when hovering over movies and
 ## Configuration
 
 The extension is pre-configured to fetch ratings from:
-```
+\`\`\`
 https://ranjithbn-tech.github.io/isitfresh/data/ratings.json
-```
+\`\`\`
 
 To change this, edit `background/service-worker.js` and update the `RATINGS_URL`.
 
@@ -36,7 +36,7 @@ To change this, edit `background/service-worker.js` and update the `RATINGS_URL`
 
 ## File Structure
 
-```
+\`\`\`
 isitfresh/
 ├── manifest.json           # Extension configuration
 ├── content/
@@ -55,7 +55,7 @@ isitfresh/
 └── .github/
     └── workflows/
         └── update-ratings.yml
-```
+\`\`\`
 
 ## Adding Icons
 
